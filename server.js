@@ -21,7 +21,11 @@ const apiRouter = require("./routes/api");
 //Creates our express app
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+const MODE = process.env.NODE_ENV;
+if (MODE === "test") {
+    //
+}
+app.enable("trust proxy");
 // Create limiter options
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minutes
