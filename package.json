@@ -1,22 +1,32 @@
 {
-  "name": "api-rate-limit",
-  "version": "1.0.0",
-  "description": "Node / Express api endpoint server with rate \u0016limiting",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ryanccrawford/node-api-rate-limit.git"
-  },
-  "author": "Ryan Crawford",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ryanccrawford/node-api-rate-limit/issues"
-  },
-  "homepage": "https://github.com/ryanccrawford/node-api-rate-limit#readme",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+    "name": "api-rate-limit",
+    "version": "1.0.0",
+    "description": "Node / Express api endpoint server with rate \u0016limiting",
+    "main": "server.js",
+    "scripts": {
+        "start": "SET NODE_ENV=dev && node server.js",
+        "nodemon": "SET NODE_ENV=dev && nodemon server.js",
+        "test": "SET NODE_ENV=test && mocha ./test/app.test.js --reporter mochawesome --timeout 90000"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ryanccrawford/node-api-rate-limit.git"
+    },
+    "author": "Ryan Crawford",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "debug": "~2.6.9",
+        "express": "^4.17.1",
+        "express-rate-limit": "^5.0.0",
+        "http-errors": "~1.6.3"
+    },
+    "devDependencies": {
+        "chai": "^3.5.0",
+        "chai-http": "^2.0.1",
+        "eslint": "^6.5.1",
+        "mocha": "^2.5.3",
+        "mochawesome": "^4.1.0",
+        "nodemon": "^1.19.4"
+    }
 }
