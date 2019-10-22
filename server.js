@@ -6,7 +6,6 @@
 const createError = require("http-errors");
 const express = require("express");
 const bodyParser = require("body-parser");
-const logger = require("morgan");
 
 /*
  *   NPM Package express-rate-limit
@@ -22,10 +21,13 @@ const apiRouter = require("./routes/api");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODE = process.env.NODE_ENV;
+console.log(MODE);
+//Allows us to spoof the req.ip during testing
 if (MODE === "test") {
-    //
+    app.enable("trust proxy");
 }
-app.enable("trust proxy");
+
+
 // Create limiter options
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minutes
@@ -40,23 +42,21 @@ const limiter = rateLimit({
 });
 
 // Load Middleware
-app.use(logger("dev"));
 app.use(express.json());
 app.use(bodyParser.json({ type: "application/*+json" }));
 app.use(express.urlencoded({ extended: false }));
-//Load middleware limiter on all routes
 app.use("/", limiter);
 
 // Load API Routes
 app.use(apiRouter);
 
-// Catch 404's and forward to error handler
+// 404 Hnadler
 app.use((req, res, next) => {
     next(createError(404));
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
