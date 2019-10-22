@@ -3,6 +3,8 @@
  *   Basic rate-limiting middleware for Express.
  *   By Nathan Friedly : https://www.npmjs.com/package/express-rate-limit
  */
+
+// Packages
 const createError = require("http-errors");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -14,28 +16,29 @@ const bodyParser = require("body-parser");
  */
 const rateLimit = require("express-rate-limit");
 
-// The API endpoints
+// The API routes
 const apiRouter = require("./routes/api");
 
-//Creates our express app
+//Create express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODE = process.env.NODE_ENV;
-console.log(MODE);
+
+
 //Allows us to spoof the req.ip during testing
-if (MODE === "test") {
-    app.enable("trust proxy");
-}
+app.enable("trust proxy");
 
 
 // Create limiter options
 const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minutes
-    max: 10, // limit each IP to 10 requests per minute
+    windowMs: 1 * 60 * 1000, // 1 minute lock out
+    max: 10, // limit to 10 requests per minute
     statusCode: 401,
     message: "Access Denied. API rate limit reached. Please wait before sending more request.",
+    //Custom key 
     keyGenerator: req => {
-        // Combines the users IP address and the request path an returns it as the key
+        // Combines the users IP address and the request path an returns it as the key,
+        // allowing us to rate limit on each endpoint by ip 
         let key = req.ip + req.url;
         return key;
     }
@@ -59,9 +62,9 @@ app.use((req, res, next) => {
 app.use((err, req, res) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
+    res.locals.error = MODE === "dev" ? err : {};
 
-    // render the error page
+    // send error in json payload
     res.status(err.status || 500);
     res.json({ message: err.status });
 });

@@ -17,3 +17,4 @@ To run the included test:
 ```bash
 $ npm run test
 ```
+Note: the last test waits 58 seconds to check to see if the endpoint has reset it's rate limit. 
